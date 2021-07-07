@@ -21,3 +21,7 @@ erl_crash.dump
 
 # Ignore package tarball (built via "mix hex.build").
 webengine_kiosk-*.tar
+
+.DS_Store
+*.stash
+.vscode/

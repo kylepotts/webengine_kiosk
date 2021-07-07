@@ -14,6 +14,15 @@
 #include "KioskSettings.h"
 #include "ElixirComs.h"
 
+#include <QQmlApplicationEngine>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QQmlComponent>
+#include <QQuickView>
+#include <QGuiApplication>
+#include <QWebEngineView>
+#include <QObject>
+
 static void kiosk_err_common(const char *format, va_list ap)
 {
     char *str;
@@ -118,6 +127,8 @@ int main(int argc, char *argv[])
     // Some settings need to be handled before Qt does anything.
     // Scan for them here. If there are issues, then KioskSettings
     // will report them.
+    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+
     gid_t desired_gid = 0;
     uid_t desired_uid = 0;
     const char *desired_user = nullptr;
@@ -186,18 +197,30 @@ int main(int argc, char *argv[])
     if (desired_uid > 0 && setuid(desired_uid) < 0)
         kiosk_errx(EXIT_FAILURE, "setuid(%d) failed", desired_uid);
 
+
     QApplication app(argc, argv);
     KioskSettings settings(app);
 
-    // Copy in the uid/gid settings for posterity.
+    //Copy in the uid/gid settings for posterity.
     settings.uid = desired_uid;
     settings.gid = desired_gid;
 
     if (desired_gid || desired_uid)
         checkPermissions();
 
+
+    QQuickView rootView(QString("qrc:/ui/main.qml"));
+    if (rootView.status() == QQuickView::Error)
+        return -1;
+    rootView.setResizeMode(QQuickView::SizeRootObjectToView);
+
+    QObject* containerView = rootView.findChild<QObject*>("appContainer");
+    QObject* engineView = containerView->findChild<QObject*>("engineView");
+
     Kiosk kiosk(&settings);
     kiosk.init();
+    kiosk.setView(qobject_cast<QQuickItem*>(engineView));
+    rootView.showFullScreen();
 
     return app.exec();
 }

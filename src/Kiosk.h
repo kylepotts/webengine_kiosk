@@ -4,6 +4,9 @@
 #include "KioskSettings.h"
 #include "ElixirJsChannel.h"
 #include <QWebEnginePage>
+#include <QtWebEngineWidgets/QWebEngineView>
+// #include <QtWebEngine/qquickwebenginescript.h>
+#include <QtQuick/QQuickItem>
 
 class ElixirComs;
 class KioskMessage;
@@ -21,6 +24,8 @@ public:
     explicit Kiosk(const KioskSettings *settings, QObject *parent = nullptr);
 
     void init();
+
+    void setView(QQuickItem *view);
 
 public slots:
     void goToUrl(const QUrl &url);
@@ -57,8 +62,8 @@ private:
     ElixirComs *coms_;
     StderrPipe *stderrPipe_;
 
-    KioskWindow *window_;
-    KioskView *view_;
+    // QWebEngineView *view_;
+    QQuickItem *view_;
 
     bool loadingPage_;
     bool showPageWhenDone_;

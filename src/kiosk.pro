@@ -1,4 +1,4 @@
-QT       = core gui network widgets multimedia webenginewidgets
+QT       = core gui network widgets multimedia webenginewidgets virtualkeyboard
 
 CONFIG += console link_pkgconfig c++11
 CONFIG -= app_bundle
@@ -33,7 +33,7 @@ HEADERS  += \
     StderrPipe.h
 
 RESOURCES += \
-    ui.qrc
+    ui.qrc 
 
 # The following line requires $INSTALL_ROOT to be set to $MIX_APP_PATH when
 # calling "make install". See $MIX_APP_PATH/obj/Makefile.

@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>ui/link-clicked.wav</file>
         <file>ui/window-clicked.wav</file>
+        <file>ui/main.qml</file>
     </qresource>
 </RCC>
